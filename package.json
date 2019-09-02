@@ -1,0 +1,37 @@
+{
+  "name": "subscribable-router",
+  "version": "1.0.0",
+  "description": "Express style routes you can subscribe to",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "eventemitter3": "^4.0.0",
+    "ix": "^2.5.3",
+    "route-parser": "0.0.5",
+    "rxjs": "^6.5.2",
+    "rxjs-compat": "^6.5.2"
+  },
+  "devDependencies": {
+    "ava": "^2.3.0",
+    "@reactivex/rxjs": "^6.5.2",
+    "@types/eventemitter3": "^2.0.2",
+    "@types/route-parser": "^0.1.3",
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hedzer/subscribable-router.git"
+  },
+  "author": "Hedzer Ferwerda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hedzer/subscribable-router/issues"
+  },
+  "homepage": "https://github.com/Hedzer/subscribable-router#readme"
+}
