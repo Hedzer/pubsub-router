@@ -9,7 +9,6 @@ class Store {
 	public unreceived: Map<HttpMethod, Set<Request>> = new Map<HttpMethod, Set<Request>>();
 
 	resolve(method: HttpMethod, path: string): EmitterHub[] {
-		console.log("RESOLVE", method, path)
 		let matches: EmitterHub[] = []; 
 		this
 			.emitters
@@ -20,12 +19,11 @@ class Store {
 				matches.push(value) :
 				null
 			);
-		console.log(matches)
+
 		return matches; 
 	}
 
 	create(method: HttpMethod, route: string): EmitterHub {
-		console.log("CREATING ", method, route);
 		return <EmitterHub>this
 			.emitters
 			.get(method)

@@ -9,11 +9,9 @@ class SenderHandle extends Handle_1.default {
     constructor(emitters, path) {
         super(emitters, path);
         this.listeners = new Map();
-        console.log("SenderHandle", emitters, path);
     }
     request(data) {
         this.defer(() => {
-            console.log("RUNNING REQUEST");
             this
                 .emitters
                 .map(emitter => {
@@ -70,9 +68,6 @@ class SenderHandle extends Handle_1.default {
         return this;
     }
     send(request) {
-        //console.log("SENDER SENDING", request);
-        console.log("SENDER EMITTER COUNT", this.emitters.length);
-        this.emitters.forEach(e => console.log("SENDER EMITTER ROUTE", e.receiver.eventNames()));
         this
             .emitters
             .forEach(emitter => emitter

@@ -8,6 +8,7 @@ class MethodMap {
 	public PUT: Map<string, EmitterHub> = new Map<string, EmitterHub>();
 	public PATCH: Map<string, EmitterHub> = new Map<string, EmitterHub>();
 	public DELETE: Map<string, EmitterHub> = new Map<string, EmitterHub>();
+	
 	get(method: HttpMethod): Map<string, EmitterHub>{
 		return this[method];
 	}

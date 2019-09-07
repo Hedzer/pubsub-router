@@ -11,7 +11,6 @@ class Store {
         this.unreceived = new Map();
     }
     resolve(method, path) {
-        console.log("RESOLVE", method, path);
         let matches = [];
         this
             .emitters
@@ -21,11 +20,9 @@ class Store {
             .match(path) ?
             matches.push(value) :
             null);
-        console.log(matches);
         return matches;
     }
     create(method, route) {
-        console.log("CREATING ", method, route);
         return this
             .emitters
             .get(method)

@@ -7,14 +7,12 @@ import Handle from "./Handle";
 class SenderHandle extends Handle<Response, Request> {
     constructor(emitters: EmitterHub[], path: string) {
         super(emitters, path);
-        console.log("SenderHandle", emitters, path);
     }
 
     public listeners: Map<number, (request: Response) => Request | void> = new Map<number, (request: Response) => Request | void>();
 
     request(data: any): this {
         this.defer(() => {
-            console.log("RUNNING REQUEST");
             this
                 .emitters
                 .map(emitter => {
@@ -58,7 +56,6 @@ class SenderHandle extends Handle<Response, Request> {
                     .forEach(catcher => { try { catcher(res, request, error) } catch(err) { console.log(err); }});
             }
 
-
             return request;
         };
 
@@ -75,10 +72,6 @@ class SenderHandle extends Handle<Response, Request> {
     }
 
     protected send(request: Request): this {
-        //console.log("SENDER SENDING", request);
-        console.log("SENDER EMITTER COUNT", this.emitters.length);
-        this.emitters.forEach(e => console.log("SENDER EMITTER ROUTE", e.receiver.eventNames()));
-        
         this
             .emitters
             .forEach(emitter => emitter
