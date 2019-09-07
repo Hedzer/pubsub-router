@@ -4,7 +4,7 @@ import Response from "./Response";
 import EmitterHub from "./EmitterHub";
 import Handle from "./Handle";
 
-class SenderHandle extends Handle {
+class SenderHandle extends Handle<Response, Request> {
     constructor(emitters: EmitterHub[], path: string) {
         super(emitters, path);
         console.log("SenderHandle", emitters, path);
@@ -29,7 +29,7 @@ class SenderHandle extends Handle {
         return this;
     }
 
-    receive(receiver: (request: Response) => Request | void, count: number = Infinity): this {
+    receive(receiver: (response: Response) => Request | void, count: number = Infinity): this {
 
         let received = 0;
         let listenerId = this.getId();
@@ -44,9 +44,20 @@ class SenderHandle extends Handle {
             }
 
             received++;
-            let request = receiver(res);
+            let request: Request | void;
+            try {
+                request = receiver(res);
+                if (request) { this.send(request); }
+            } catch (error) {
+                if (request) {
+                    request.error = error;
+                }
 
-            if (request) { this.send(request); }
+                this
+                    .catchers
+                    .forEach(catcher => { try { catcher(res, request, error) } catch(err) { console.log(err); }});
+            }
+
 
             return request;
         };
@@ -62,7 +73,6 @@ class SenderHandle extends Handle {
         
         return this;
     }
-
 
     protected send(request: Request): this {
         //console.log("SENDER SENDING", request);

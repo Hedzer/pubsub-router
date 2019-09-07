@@ -39,9 +39,25 @@ class SenderHandle extends Handle_1.default {
                 return;
             }
             received++;
-            let request = receiver(res);
-            if (request) {
-                this.send(request);
+            let request;
+            try {
+                request = receiver(res);
+                if (request) {
+                    this.send(request);
+                }
+            }
+            catch (error) {
+                if (request) {
+                    request.error = error;
+                }
+                this
+                    .catchers
+                    .forEach(catcher => { try {
+                    catcher(res, request, error);
+                }
+                catch (err) {
+                    console.log(err);
+                } });
             }
             return request;
         };

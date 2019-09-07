@@ -9,6 +9,7 @@ declare class Request {
     params: object;
     data: any;
     hub: EmitterHub;
+    error: Error | undefined;
     copy(): Request;
 }
 export default Request;

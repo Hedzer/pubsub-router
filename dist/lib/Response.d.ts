@@ -9,6 +9,7 @@ declare class Response {
     path: string;
     params: object;
     data: any;
+    error: Error | undefined;
     copy(): Response;
 }
 export default Response;

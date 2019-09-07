@@ -20,6 +20,7 @@ class Request {
         request.params = this.params;
         request.data = this.data;
         request.hub = this.hub;
+        request.error = this.error;
         return request;
     }
 }

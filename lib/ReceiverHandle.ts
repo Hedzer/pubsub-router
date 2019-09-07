@@ -4,7 +4,7 @@ import Response from "./Response";
 import EmitterHub from "./EmitterHub";
 import Handle from './Handle';
 
-class ReceiverHandle extends Handle {
+class ReceiverHandle extends Handle<Request, Response> {
     constructor(emitters: EmitterHub[], route: string) {
         super(emitters, route);
         console.log("ReceiverHandle", emitters, route);
@@ -30,8 +30,20 @@ class ReceiverHandle extends Handle {
 
             console.log("GETTING TO SEND");
             sent++;
-            let response = new Response(req, responder(req));
-            this.send(response);
+
+            let response: Response | void;
+            try {
+                response = new Response(req, responder(req));
+                this.send(response);
+            } catch (error) {
+                if (response) {
+                    response.error = error;
+                }
+
+                this
+                    .catchers
+                    .forEach(catcher => { try { catcher(req, response, error) } catch(err) { console.log(err); }});
+            }
 
             return response;
         };

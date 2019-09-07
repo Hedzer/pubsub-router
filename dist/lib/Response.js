@@ -19,6 +19,7 @@ class Response {
         response.timestamp = this.timestamp;
         response.params = this.params;
         response.data = this.data;
+        response.error = this.error;
         return response;
     }
 }

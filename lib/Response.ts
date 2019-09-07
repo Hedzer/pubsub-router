@@ -19,6 +19,7 @@ class Response {
     public path: string;
     public params: object;
     public data: any;
+    public error: Error | undefined;
 
     copy(): Response {
         let response = new Response(this.request, this.data);
@@ -29,6 +30,7 @@ class Response {
         response.timestamp = this.timestamp;
         response.params = this.params;
         response.data = this.data;
+        response.error = this.error;
         return response;
     }
 }

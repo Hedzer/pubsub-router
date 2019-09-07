@@ -4,6 +4,7 @@ class Handle {
     constructor(emitters, route) {
         this.isDisabled = false;
         this.currentId = 0;
+        this.catchers = [];
         this.emitters = emitters;
         this.route = route;
     }
@@ -26,6 +27,11 @@ class Handle {
             .sender
             .removeListener('*', listeners.get(listenerId)));
         listeners.delete(listenerId);
+        this.catchers = [];
+        return this;
+    }
+    catch(catcher) {
+        this.catchers.push(catcher);
         return this;
     }
     getId() {

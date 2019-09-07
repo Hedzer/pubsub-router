@@ -2,7 +2,7 @@ import Request from "./Request";
 import Response from "./Response";
 import EmitterHub from "./EmitterHub";
 import Handle from './Handle';
-declare class ReceiverHandle extends Handle {
+declare class ReceiverHandle extends Handle<Request, Response> {
     constructor(emitters: EmitterHub[], route: string);
     listeners: Map<number, (request: Request) => Response | void>;
     respond(responder: (request: Request) => any, count?: number): this;

@@ -15,6 +15,7 @@ class Request {
     public params: object;
     public data: any;
     public hub: EmitterHub;
+    public error: Error | undefined;
 
     copy(): Request {
         let request = new Request(this.hub, this.path, this.data);
@@ -25,6 +26,7 @@ class Request {
         request.params = this.params;
         request.data = this.data;
         request.hub = this.hub;
+        request.error = this.error;
         return request;
     }
 }

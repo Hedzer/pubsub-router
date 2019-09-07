@@ -1,7 +1,10 @@
 
-import EmitterHub from "./EmitterHub";
+import EmitterHub from './EmitterHub';
+import Request from './Request';
+import Response from './Response';
+import Message from './Message';
 
-class Handle {
+abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     constructor(emitters: EmitterHub[], route: string) {
         this.emitters = emitters;
         this.route = route;
@@ -10,7 +13,8 @@ class Handle {
     public route: string;
     public emitters: EmitterHub[];
     public isDisabled: boolean = false;
-    private currentId: number = 0;
+    protected currentId: number = 0;
+    protected catchers: ((inbound: INBOUND | void, outbound: OUTBOUND | void, error: Error) => void)[] = [];
 
     disable(): this {
         this.isDisabled = true;
@@ -35,6 +39,12 @@ class Handle {
             .removeListener('*', listeners.get(listenerId))
         );
         listeners.delete(listenerId);
+        this.catchers = [];
+        return this;
+    }
+
+    catch(catcher: (request: INBOUND | void, response: OUTBOUND | void, error: Error) => void): this {
+        this.catchers.push(catcher);
         return this;
     }
 
@@ -47,7 +57,6 @@ class Handle {
         setTimeout(method, 0);
         return this;
     }
-
 }
 
 export default Handle;

@@ -27,8 +27,24 @@ class ReceiverHandle extends Handle_1.default {
             }
             console.log("GETTING TO SEND");
             sent++;
-            let response = new Response_1.default(req, responder(req));
-            this.send(response);
+            let response;
+            try {
+                response = new Response_1.default(req, responder(req));
+                this.send(response);
+            }
+            catch (error) {
+                if (response) {
+                    response.error = error;
+                }
+                this
+                    .catchers
+                    .forEach(catcher => { try {
+                    catcher(req, response, error);
+                }
+                catch (err) {
+                    console.log(err);
+                } });
+            }
             return response;
         };
         this.listeners.set(listenerId, listener);
