@@ -2,7 +2,7 @@
 import EmitterHub from './EmitterHub';
 import Message from './Message';
 import ID from './ID';
-import EmitterType from './EmitterType';
+import EmitterRole from './EmitterRole';
 
 let id = ID.generate();
 
@@ -32,14 +32,14 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
         return this;
     }
 
-    protected removeAll(listeners: Map<string, any>, type: EmitterType): this {
+    protected removeAll(listeners: Map<string, any>, type: EmitterRole): this {
         listeners
             .forEach((listener, id) => this.removeListener(listeners, type, id));
 
         return this;
     }
 
-    protected removeListener(listeners: Map<string, any>, type: EmitterType, listenerId: string): this {
+    protected removeListener(listeners: Map<string, any>, type: EmitterRole, listenerId: string): this {
         this
             .emitters
             .forEach(emitter => emitter
