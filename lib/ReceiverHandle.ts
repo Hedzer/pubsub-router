@@ -55,6 +55,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         let sent = 0;
         let listenerId = this.getId();
         let listener = (req: Request) => {
+            
             if (this.isDisabled) { return; }
             
             if (sent >= count) {
