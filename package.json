@@ -28,12 +28,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hedzer/subscribable-router.git"
+    "url": "git+https://github.com/Hedzer/pubsub-router.git"
   },
   "author": "Hedzer Ferwerda",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hedzer/subscribable-router/issues"
+    "url": "https://github.com/Hedzer/pubsub-router/issues"
   },
-  "homepage": "https://github.com/Hedzer/subscribable-router#readme"
+  "homepage": "https://github.com/Hedzer/pubsub-router#readme"
 }
