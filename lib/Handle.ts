@@ -15,7 +15,6 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     public route: string;
     public emitters: EmitterHub[];
     public isDisabled: boolean = false;
-    protected catchers: ((inbound: INBOUND | void, outbound: OUTBOUND | void, error: Error) => void)[] = [];
 
     disable(): this {
         this.isDisabled = true;
@@ -47,12 +46,6 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
                 .removeListener('*', listeners.get(listenerId))
             );
         listeners.delete(listenerId);
-        this.catchers = [];
-        return this;
-    }
-
-    catch(catcher: (request: INBOUND | void, response: OUTBOUND | void, error: Error) => void): this {
-        this.catchers.push(catcher);
         return this;
     }
 

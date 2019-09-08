@@ -61,10 +61,6 @@ class SenderHandle extends Handle<Response, Request> {
                 if (request) {
                     request.error = error;
                 }
-
-                this
-                    .catchers
-                    .forEach(catcher => { try { catcher(res, request, error) } catch(err) { console.log(err); }});
             }
 
             return request;

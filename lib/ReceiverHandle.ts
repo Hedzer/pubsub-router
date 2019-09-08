@@ -71,10 +71,6 @@ class ReceiverHandle extends Handle<Request, Response> {
                 if (response) {
                     response.error = error;
                 }
-
-                this
-                    .catchers
-                    .forEach(catcher => { try { catcher(req, response, error) } catch(err) { console.log(err); }});
             }
 
             return response;
