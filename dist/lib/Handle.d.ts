@@ -1,5 +1,6 @@
 import EmitterHub from './EmitterHub';
 import Message from './Message';
+import EmitterType from './EmitterType';
 declare abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     constructor(emitters: EmitterHub[], route: string);
     route: string;
@@ -9,7 +10,8 @@ declare abstract class Handle<INBOUND extends Message, OUTBOUND extends Message>
     disable(): this;
     enable(): this;
     disabled(disabled: boolean): this;
-    remove(listeners: Map<string, any>, listenerId: string): this;
+    protected removeAll(listeners: Map<string, any>, type: EmitterType): this;
+    protected removeListener(listeners: Map<string, any>, type: EmitterType, listenerId: string): this;
     catch(catcher: (request: INBOUND | void, response: OUTBOUND | void, error: Error) => void): this;
     protected getId(): string;
     protected defer(method: (...params: any) => any): this;

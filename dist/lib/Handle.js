@@ -24,11 +24,15 @@ class Handle {
         this.isDisabled = disabled;
         return this;
     }
-    remove(listeners, listenerId) {
+    removeAll(listeners, type) {
+        listeners
+            .forEach((listener, id) => this.removeListener(listeners, type, id));
+        return this;
+    }
+    removeListener(listeners, type, listenerId) {
         this
             .emitters
-            .forEach(emitter => emitter
-            .sender
+            .forEach(emitter => emitter[type]
             .removeListener('*', listeners.get(listenerId)));
         listeners.delete(listenerId);
         this.catchers = [];

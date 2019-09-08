@@ -1,8 +1,9 @@
 
-import Request from "./Request";
-import Response from "./Response";
-import EmitterHub from "./EmitterHub";
-import Handle from "./Handle";
+import Request from './Request';
+import Response from './Response';
+import EmitterHub from './EmitterHub';
+import Handle from './Handle';
+import { SENDER, RECEIVER } from './Constants';
 
 class SenderHandle extends Handle<Response, Request> {
     constructor(emitters: EmitterHub[], path: string) {
@@ -17,7 +18,28 @@ class SenderHandle extends Handle<Response, Request> {
     }
 
     receive(receiver: (response: Response) => Request | void, count: number = Infinity): this {
+        let listener = this.createListener(receiver, (req) => this.send(req), count);
+        this
+            .emitters
+            .forEach(emitter => emitter
+                [SENDER]
+                .on(this.route, listener)
+            );
+        
+        return this;
+    }
 
+    receiveOnce(receiver: (response: Response) => Request | void): this {
+        return this.receive(receiver, 1);
+    }
+
+    remove(): this {
+        this.removeAll(this.listeners, SENDER);
+        return this;
+    }
+
+    protected createListener(receiver: (response: Response) => Request | void, requester: (data: any) => any, count: number = Infinity) {
+    
         let received = 0;
         let listenerId = this.getId();
 
@@ -26,7 +48,7 @@ class SenderHandle extends Handle<Response, Request> {
             if (this.isDisabled) { return; }
             
             if (received >= count) {
-                this.remove(this.listeners, listenerId);
+                this.removeListener(this.listeners, SENDER, listenerId);
                 return;
             }
 
@@ -34,7 +56,7 @@ class SenderHandle extends Handle<Response, Request> {
             let request: Request | void;
             try {
                 request = receiver(res);
-                if (request) { this.send(request); }
+                if (request) { requester(request); }
             } catch (error) {
                 if (request) {
                     request.error = error;
@@ -50,14 +72,7 @@ class SenderHandle extends Handle<Response, Request> {
 
         this.listeners.set(listenerId, listener);
 
-        this
-            .emitters
-            .forEach(emitter => emitter
-                .sender
-                .on(this.route, listener)
-            );
-        
-        return this;
+        return listener;
     }
 
     protected send(data: any): this {
@@ -73,7 +88,7 @@ class SenderHandle extends Handle<Response, Request> {
             })
             .forEach(pair => pair
                 .emitter
-                .receiver
+                [RECEIVER]
                 .emit('*', pair.request)
             );
         return this;

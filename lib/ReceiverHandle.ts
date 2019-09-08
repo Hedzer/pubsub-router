@@ -1,8 +1,10 @@
 
-import Request from "./Request";
-import Response from "./Response";
-import EmitterHub from "./EmitterHub";
+import Request from './Request';
+import Response from './Response';
+import EmitterHub from './EmitterHub';
 import Handle from './Handle';
+import { SENDER, RECEIVER } from './Constants';
+
 
 class ReceiverHandle extends Handle<Request, Response> {
     constructor(emitters: EmitterHub[], route: string) {
@@ -12,15 +14,51 @@ class ReceiverHandle extends Handle<Request, Response> {
     public listeners: Map<string, (request: Request) => Response | void> = new Map<string, (request: Request) => Response | void>();
 
     respond(responder: (request: Request) => any, count: number = Infinity): this {
+        let listener = this.createListener(responder, (res) => this.send(res), count);
+        this
+            .emitters
+            .forEach(emitter => emitter
+                [RECEIVER]
+                .on('*', listener)
+            );
+
+        return this;
+    }
+
+    respondOnce(responder: (request: Request) => Response): this {
+        return this.respond(responder, 1);
+    }
+
+    subscribe(subscriber: (request: Request) => void, count: number = Infinity): this {
+        let listener = this.createListener(subscriber, () => {}, count);
+        this
+            .emitters
+            .forEach(emitter => emitter
+                .receiver
+                .on('*', listener)
+            );
+
+        return this;
+    }
+
+    subscribeOnce(subscriber: (request: Request) => void): this {
+        return this.subscribe(subscriber, 1);
+    }
+
+    remove(): this {
+        this.removeAll(this.listeners, RECEIVER);
+        return this;
+    }
+
+    protected createListener(responder: (request: Request) => any, sender: (response: Response) => any, count: number = Infinity) {
 
         let sent = 0;
         let listenerId = this.getId();
-
         let listener = (req: Request) => {
             if (this.isDisabled) { return; }
             
             if (sent >= count) {
-                this.remove(this.listeners, listenerId);
+                this.removeListener(this.listeners, RECEIVER, listenerId);
                 return;
             }
 
@@ -28,7 +66,7 @@ class ReceiverHandle extends Handle<Request, Response> {
             let response: Response | void;
             try {
                 response = new Response(req, responder(req));
-                this.send(response);
+                sender(response);
             } catch (error) {
                 if (response) {
                     response.error = error;
@@ -41,28 +79,16 @@ class ReceiverHandle extends Handle<Request, Response> {
 
             return response;
         };
-
         this.listeners.set(listenerId, listener);
 
-        this
-            .emitters
-            .forEach(emitter => emitter
-                .receiver
-                .on('*', listener)
-            );
-
-        return this;
-    }
-
-    respondOnce(responder: (request: Request) => Response): this {
-        return this.respond(responder, 1);
+        return listener;
     }
 
     protected send(response: Response): this {
         this
             .emitters
             .forEach(emitter => emitter
-                .sender
+                [SENDER]
                 .emit(response.request.path, response)
             );
         return this;

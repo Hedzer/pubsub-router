@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Request_1 = __importDefault(require("./Request"));
 const Handle_1 = __importDefault(require("./Handle"));
+const Constants_1 = require("./Constants");
 class SenderHandle extends Handle_1.default {
     constructor(emitters, path) {
         super(emitters, path);
@@ -15,6 +16,21 @@ class SenderHandle extends Handle_1.default {
         return this;
     }
     receive(receiver, count = Infinity) {
+        let listener = this.createListener(receiver, (req) => this.send(req), count);
+        this
+            .emitters
+            .forEach(emitter => emitter[Constants_1.SENDER]
+            .on(this.route, listener));
+        return this;
+    }
+    receiveOnce(receiver) {
+        return this.receive(receiver, 1);
+    }
+    remove() {
+        this.removeAll(this.listeners, Constants_1.SENDER);
+        return this;
+    }
+    createListener(receiver, requester, count = Infinity) {
         let received = 0;
         let listenerId = this.getId();
         let listener = (res) => {
@@ -22,7 +38,7 @@ class SenderHandle extends Handle_1.default {
                 return;
             }
             if (received >= count) {
-                this.remove(this.listeners, listenerId);
+                this.removeListener(this.listeners, Constants_1.SENDER, listenerId);
                 return;
             }
             received++;
@@ -30,7 +46,7 @@ class SenderHandle extends Handle_1.default {
             try {
                 request = receiver(res);
                 if (request) {
-                    this.send(request);
+                    requester(request);
                 }
             }
             catch (error) {
@@ -49,12 +65,7 @@ class SenderHandle extends Handle_1.default {
             return request;
         };
         this.listeners.set(listenerId, listener);
-        this
-            .emitters
-            .forEach(emitter => emitter
-            .sender
-            .on(this.route, listener));
-        return this;
+        return listener;
     }
     send(data) {
         this
@@ -67,8 +78,7 @@ class SenderHandle extends Handle_1.default {
             return { request: req, emitter };
         })
             .forEach(pair => pair
-            .emitter
-            .receiver
+            .emitter[Constants_1.RECEIVER]
             .emit('*', pair.request));
         return this;
     }
