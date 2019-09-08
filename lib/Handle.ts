@@ -3,6 +3,9 @@ import EmitterHub from './EmitterHub';
 import Request from './Request';
 import Response from './Response';
 import Message from './Message';
+import ID from './ID';
+
+let id = ID.generate();
 
 abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     constructor(emitters: EmitterHub[], route: string) {
@@ -13,7 +16,6 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     public route: string;
     public emitters: EmitterHub[];
     public isDisabled: boolean = false;
-    protected currentId: number = 0;
     protected catchers: ((inbound: INBOUND | void, outbound: OUTBOUND | void, error: Error) => void)[] = [];
 
     disable(): this {
@@ -31,7 +33,7 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
         return this;
     }
 
-    remove(listeners: Map<number, any>, listenerId: number): this {
+    remove(listeners: Map<string, any>, listenerId: string): this {
         this
         .emitters
         .forEach(emitter => emitter
@@ -48,9 +50,8 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
         return this;
     }
 
-    protected getId(): number {
-        this.currentId++;
-        return this.currentId;
+    protected getId(): string {
+        return id.next().value;
     }
 
     protected defer(method: (...params: any) => any): this {

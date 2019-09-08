@@ -1,5 +1,8 @@
 import HttpMethod from "./HttpMethod";
 import EmitterHub from "./EmitterHub";
+import ID from "./ID";
+
+let id = ID.generate();
 
 class Request {
     constructor(hub: EmitterHub, path: string, data: any) {
@@ -8,6 +11,7 @@ class Request {
         this.params = hub.matcher.match(path) || {};
         this.data = data;
     }
+    public id: string = id.next().value;
     public method: HttpMethod = 'GET';
     public route: string = '';
     public timestamp: Date = new Date();

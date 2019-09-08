@@ -1,7 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const ID_1 = __importDefault(require("./ID"));
+let id = ID_1.default.generate();
 class Request {
     constructor(hub, path, data) {
+        this.id = id.next().value;
         this.method = 'GET';
         this.route = '';
         this.timestamp = new Date();

@@ -1,9 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const ID_1 = __importDefault(require("./ID"));
+let id = ID_1.default.generate();
 class Handle {
     constructor(emitters, route) {
         this.isDisabled = false;
-        this.currentId = 0;
         this.catchers = [];
         this.emitters = emitters;
         this.route = route;
@@ -35,8 +39,7 @@ class Handle {
         return this;
     }
     getId() {
-        this.currentId++;
-        return this.currentId;
+        return id.next().value;
     }
     defer(method) {
         setTimeout(method, 0);

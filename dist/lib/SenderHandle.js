@@ -11,18 +11,7 @@ class SenderHandle extends Handle_1.default {
         this.listeners = new Map();
     }
     request(data) {
-        this.defer(() => {
-            this
-                .emitters
-                .map(emitter => {
-                let req = new Request_1.default(emitter, this.route, data);
-                req.hub = emitter;
-                req.method = emitter.method;
-                req.route = emitter.route;
-                return req;
-            })
-                .forEach((request) => this.send(request));
-        });
+        this.defer(() => this.send(data));
         return this;
     }
     receive(receiver, count = Infinity) {
@@ -67,12 +56,20 @@ class SenderHandle extends Handle_1.default {
             .on(this.route, listener));
         return this;
     }
-    send(request) {
+    send(data) {
         this
             .emitters
-            .forEach(emitter => emitter
+            .map(emitter => {
+            let req = new Request_1.default(emitter, this.route, data);
+            req.hub = emitter;
+            req.method = emitter.method;
+            req.route = emitter.route;
+            return { request: req, emitter };
+        })
+            .forEach(pair => pair
+            .emitter
             .receiver
-            .emit('*', request));
+            .emit('*', pair.request));
         return this;
     }
 }

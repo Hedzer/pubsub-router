@@ -1,5 +1,8 @@
 import HttpMethod from "./HttpMethod";
 import Request from "./Request";
+import ID from "./ID";
+
+let id = ID.generate();
 
 class Response {
     constructor(request: Request, data: any) {
@@ -12,6 +15,7 @@ class Response {
         this.data = data;
     }
 
+    public id: string = id.next().value;
     public request: Request;
     public method: HttpMethod;
     public route: string;

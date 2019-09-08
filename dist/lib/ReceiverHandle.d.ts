@@ -4,7 +4,7 @@ import EmitterHub from "./EmitterHub";
 import Handle from './Handle';
 declare class ReceiverHandle extends Handle<Request, Response> {
     constructor(emitters: EmitterHub[], route: string);
-    listeners: Map<number, (request: Request) => Response | void>;
+    listeners: Map<string, (request: Request) => Response | void>;
     respond(responder: (request: Request) => any, count?: number): this;
     respondOnce(responder: (request: Request) => Response): this;
     protected send(response: Response): this;

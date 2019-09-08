@@ -9,21 +9,10 @@ class SenderHandle extends Handle<Response, Request> {
         super(emitters, path);
     }
 
-    public listeners: Map<number, (request: Response) => Request | void> = new Map<number, (request: Response) => Request | void>();
+    public listeners: Map<string, (request: Response) => Request | void> = new Map<string, (request: Response) => Request | void>();
 
     request(data: any): this {
-        this.defer(() => {
-            this
-                .emitters
-                .map(emitter => {
-                    let req = new Request(emitter, this.route, data);
-                    req.hub = emitter;
-                    req.method = emitter.method;
-                    req.route = emitter.route;
-                    return req;
-                })
-                .forEach((request) => this.send(request));
-        });
+        this.defer(() => this.send(data));
         return this;
     }
 
@@ -71,12 +60,21 @@ class SenderHandle extends Handle<Response, Request> {
         return this;
     }
 
-    protected send(request: Request): this {
+    protected send(data: any): this {
+
         this
             .emitters
-            .forEach(emitter => emitter
+            .map(emitter => {
+                let req = new Request(emitter, this.route, data);
+                req.hub = emitter;
+                req.method = emitter.method;
+                req.route = emitter.route;
+                return { request: req, emitter };
+            })
+            .forEach(pair => pair
+                .emitter
                 .receiver
-                .emit('*', request)
+                .emit('*', pair.request)
             );
         return this;
     }

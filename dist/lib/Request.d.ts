@@ -2,6 +2,7 @@ import HttpMethod from "./HttpMethod";
 import EmitterHub from "./EmitterHub";
 declare class Request {
     constructor(hub: EmitterHub, path: string, data: any);
+    id: string;
     method: HttpMethod;
     route: string;
     timestamp: Date;

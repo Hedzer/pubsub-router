@@ -9,7 +9,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         super(emitters, route);
     }
 
-    public listeners: Map<number, (request: Request) => Response | void> = new Map<number, (request: Request) => Response | void>();
+    public listeners: Map<string, (request: Request) => Response | void> = new Map<string, (request: Request) => Response | void>();
 
     respond(responder: (request: Request) => any, count: number = Infinity): this {
 
@@ -25,7 +25,6 @@ class ReceiverHandle extends Handle<Request, Response> {
             }
 
             sent++;
-
             let response: Response | void;
             try {
                 response = new Response(req, responder(req));
@@ -51,7 +50,7 @@ class ReceiverHandle extends Handle<Request, Response> {
                 .receiver
                 .on('*', listener)
             );
-        
+
         return this;
     }
 
