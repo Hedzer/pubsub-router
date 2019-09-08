@@ -1,14 +1,15 @@
 {
-  "name": "subscribable-router",
+  "name": "pubsub-router",
   "version": "1.0.0",
-  "description": "Express style routes you can subscribe to",
+  "description": "Express style routes, publish subscribe style delivery.",
   "main": "index.js",
   "directories": {
     "lib": "dist/index.js"
   },
   "dependencies": {
     "eventemitter3": "^4.0.0",
-    "route-parser": "0.0.5"
+    "route-parser": "0.0.5",
+    "tsc": "^1.20150623.0"
   },
   "devDependencies": {
     "ava": "^2.3.0",
@@ -19,6 +20,11 @@
   "scripts": {
     "build": "tsc",
     "test": "ava"
+  },
+  "ava": {
+    "files": [
+      "./tests/*.js"
+    ]
   },
   "repository": {
     "type": "git",
