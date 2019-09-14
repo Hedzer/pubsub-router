@@ -1,8 +1,9 @@
 
 import Receiver from './Receiver';
 import Store from './Store';
-import Router from '..';
+import Router from './Router';
 import SenderHandle from './SenderHandle';
+import HttpMethod from './HttpMethod';
 
 class Sender {
 
@@ -17,31 +18,41 @@ class Sender {
 	private receiver: Receiver;
 
 	get(path: string, data: any): SenderHandle {
-		let handle = new SenderHandle(this.store.retrieve('GET', path), path);
+		let method: HttpMethod = 'GET';
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
 		if (arguments.length > 1) { handle.request(data); }
 		return handle;
 	}
 
 	post(path: string, data: any): SenderHandle {
-		let handle = new SenderHandle(this.store.retrieve('POST', path), path);
+		let method: HttpMethod = 'POST';
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
 		if (arguments.length > 1) { handle.request(data); }
 		return handle;
 	}
 
 	put(path: string, data: any): SenderHandle {
-		let handle = new SenderHandle(this.store.retrieve('PUT', path), path);
+		let method: HttpMethod = 'PUT';
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
 		if (arguments.length > 1) { handle.request(data); }
 		return handle;
 	}
 
 	patch(path: string, data: any): SenderHandle {
-		let handle = new SenderHandle(this.store.retrieve('PATCH', path), path);
+		let method: HttpMethod = 'PATCH';
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
 		if (arguments.length > 1) { handle.request(data); }
 		return handle;
 	}
 
 	delete(path: string, data: any): SenderHandle {
-		let handle = new SenderHandle(this.store.retrieve('DELETE', path), path);
+		let method: HttpMethod = 'DELETE';
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
 		if (arguments.length > 1) { handle.request(data); }
 		return handle;
 	}

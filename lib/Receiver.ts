@@ -1,8 +1,9 @@
 
 import Store from './Store';
-import Router from '..';
+import Router from './Router';
 import Sender from './Sender';
 import ReceiverHandle from "./ReceiverHandle";
+import HttpMethod from './HttpMethod';
 
 class Receiver {
 
@@ -17,23 +18,33 @@ class Receiver {
 	private sender: Sender;
 
 	get(route: string): ReceiverHandle {	
-		return new ReceiverHandle(this.store.retrieve('GET', route), route);
+		let method: HttpMethod = 'GET';
+		let emitters = this.store.retrieve(method, route);
+		return new ReceiverHandle(this.router, method, emitters, route);
 	}
 
 	post(route: string): ReceiverHandle {
-		return new ReceiverHandle(this.store.retrieve('POST', route), route);
+		let method: HttpMethod = 'POST';
+		let emitters = this.store.retrieve(method, route);
+		return new ReceiverHandle(this.router, method, emitters, route);
 	}
 
 	put(route: string): ReceiverHandle {
-		return new ReceiverHandle(this.store.retrieve('PUT', route), route);
+		let method: HttpMethod = 'PUT';
+		let emitters = this.store.retrieve(method, route);
+		return new ReceiverHandle(this.router, method, emitters, route);
 	}
 
 	patch(route: string): ReceiverHandle {
-		return new ReceiverHandle(this.store.retrieve('PATCH', route), route);
+		let method: HttpMethod = 'PATCH';
+		let emitters = this.store.retrieve(method, route);
+		return new ReceiverHandle(this.router, method, emitters, route);
 	}
 
 	delete(route: string): ReceiverHandle {
-		return new ReceiverHandle(this.store.retrieve('DELETE', route), route);
+		let method: HttpMethod = 'DELETE';
+		let emitters = this.store.retrieve(method, route);
+		return new ReceiverHandle(this.router, method, emitters, route);
 	}
 }
 

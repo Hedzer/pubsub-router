@@ -3,15 +3,22 @@ import EmitterHub from './EmitterHub';
 import Message from './Message';
 import ID from './ID';
 import EmitterRole from './EmitterRole';
+import { SENDER, RECEIVER } from './Constants';
+import Router from './Router';
+import HttpMethod from './HttpMethod';
 
 let id = ID.generate();
 
 abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
-    constructor(emitters: EmitterHub[], route: string) {
+    constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], route: string) {
+        this.router = router;
+        this.method = method;
         this.emitters = emitters;
         this.route = route;
     }
 
+    public router: Router;
+    public method: HttpMethod;
     public route: string;
     public emitters: EmitterHub[];
     public isDisabled: boolean = false;
@@ -34,17 +41,23 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
     protected removeAll(listeners: Map<string, any>, type: EmitterRole): this {
         listeners
             .forEach((listener, id) => this.removeListener(listeners, type, id));
-
         return this;
     }
 
     protected removeListener(listeners: Map<string, any>, type: EmitterRole, listenerId: string): this {
         this
             .emitters
-            .forEach(emitter => emitter
-                [type]
-                .removeListener('*', listeners.get(listenerId))
-            );
+            .forEach(emitter =>  {
+                emitter
+                    [type]
+                    .removeListener('*', listeners.get(listenerId));
+
+                this
+                    .router
+                    .store
+                    .events
+                    .emit(`removed ${type} ${emitter.method} ${emitter.route}`);
+            });
         listeners.delete(listenerId);
         return this;
     }

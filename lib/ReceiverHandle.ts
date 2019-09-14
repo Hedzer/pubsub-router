@@ -4,11 +4,13 @@ import Response from './Response';
 import EmitterHub from './EmitterHub';
 import Handle from './Handle';
 import { SENDER, RECEIVER } from './Constants';
+import Router from './Router';
+import HttpMethod from './HttpMethod';
 
 
 class ReceiverHandle extends Handle<Request, Response> {
-    constructor(emitters: EmitterHub[], route: string) {
-        super(emitters, route);
+    constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], route: string) {
+        super(router, method, emitters, route);
     }
 
     public listeners: Map<string, (request: Request) => Response | void> = new Map<string, (request: Request) => Response | void>();
@@ -34,7 +36,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         this
             .emitters
             .forEach(emitter => emitter
-                .receiver
+                [RECEIVER]
                 .on('*', listener)
             );
 
@@ -55,7 +57,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         let sent = 0;
         let listenerId = this.getId();
         let listener = (req: Request) => {
-            
+
             if (this.isDisabled) { return; }
             
             if (sent >= count) {
@@ -76,7 +78,10 @@ class ReceiverHandle extends Handle<Request, Response> {
 
             return response;
         };
-        this.listeners.set(listenerId, listener);
+
+        this
+            .listeners
+            .set(listenerId, listener);
 
         return listener;
     }

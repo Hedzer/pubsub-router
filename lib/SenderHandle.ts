@@ -4,13 +4,23 @@ import Response from './Response';
 import EmitterHub from './EmitterHub';
 import Handle from './Handle';
 import { SENDER, RECEIVER } from './Constants';
+import Router from './Router';
+import HttpMethod from './HttpMethod';
+import ReceiveParams from './ReceiveParams';
 
 class SenderHandle extends Handle<Response, Request> {
-    constructor(emitters: EmitterHub[], path: string) {
-        super(emitters, path);
+    constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], path: string) {
+        super(router, method, emitters, path);
+        
+        router
+            .store
+            .events
+            .on(`added ${RECEIVER} ${method}`, e => this.onReceiverAdded(e), this)
+            .on(`removed ${RECEIVER} ${method}`, e => this.onReceiverRemoved(e), this);
     }
 
     public listeners: Map<string, (request: Response) => Request | void> = new Map<string, (request: Response) => Request | void>();
+    private receivers: Set<ReceiveParams> = new Set<ReceiveParams>();  
 
     request(data: any): this {
         this.defer(() => this.send(data));
@@ -26,6 +36,8 @@ class SenderHandle extends Handle<Response, Request> {
                 .on(this.route, listener)
             );
         
+        this.receivers.add(new ReceiveParams(receiver, count, listener));
+
         return this;
     }
 
@@ -35,11 +47,17 @@ class SenderHandle extends Handle<Response, Request> {
 
     remove(): this {
         this.removeAll(this.listeners, SENDER);
+        
+        this
+            .router
+            .store
+            .events
+            .removeListener(`added ${RECEIVER} ${this.method}`, e => this.onReceiverAdded(e), this)
+            .removeListener(`removed ${RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e), this);
         return this;
     }
 
     protected createListener(receiver: (response: Response) => Request | void, requester: (data: any) => any, count: number = Infinity) {
-    
         let received = 0;
         let listenerId = this.getId();
 
@@ -72,7 +90,6 @@ class SenderHandle extends Handle<Response, Request> {
     }
 
     protected send(data: any): this {
-
         this
             .emitters
             .map(emitter => {
@@ -90,6 +107,29 @@ class SenderHandle extends Handle<Response, Request> {
         return this;
     }
 
+
+    onReceiverAdded(emitter: EmitterHub) {
+        if (!emitter || !emitter.matcher.match(this.route)) { return; }
+
+        this
+            .emitters
+            .push(emitter);
+        
+        this
+            .receivers
+            .forEach(receiver => emitter
+                [SENDER]
+                .on(this.route, receiver.listener)
+            );
+    }
+
+    protected onReceiverRemoved(emitter: EmitterHub) {
+        if (!emitter) { return; }
+
+        this.emitters = this
+            .emitters
+            .filter(e => e.id != emitter.id);
+    }
 }
 
 export default SenderHandle;
