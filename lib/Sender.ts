@@ -17,18 +17,18 @@ class Sender {
 	private store: Store;
 	private receiver: Receiver;
 
-    get = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.GET, path, data);
-    post = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.POST, path, data);
-    put = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PUT, path, data);
-    patch = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PATCH, path, data);
-    delete = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.DELETE, path, data);
+	get = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.GET, path, data);
+	post = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.POST, path, data);
+	put = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PUT, path, data);
+	patch = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PATCH, path, data);
+	delete = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.DELETE, path, data);
 
 	private getHandle(method: HttpMethod, path: string, data: any[]): SenderHandle {
-        let emitters = this.store.retrieve(method, path);
-        let handle = new SenderHandle(this.router, method, emitters, path);
-        if (data.length) { handle.request(data); }
-        return handle;
-    }
+		let emitters = this.store.retrieve(method, path);
+		let handle = new SenderHandle(this.router, method, emitters, path);
+		if (data.length) { handle.request(data); }
+		return handle;
+	}
 }
 
 export default Sender;

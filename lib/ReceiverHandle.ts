@@ -9,92 +9,92 @@ import EmitterRole from './EmitterRole';
 
 
 class ReceiverHandle extends Handle<Request, Response> {
-    constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], route: string) {
-        super(router, method, emitters, route);
-    }
+	constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], route: string) {
+		super(router, method, emitters, route);
+	}
 
-    public listeners: Map<string, (request: Request) => Response | void> = new Map<string, (request: Request) => Response | void>();
+	public listeners: Map<string, (request: Request) => Response | void> = new Map<string, (request: Request) => Response | void>();
 
-    respond(responder: (request: Request) => any, count: number = Infinity): this {
-        let listener = this.createListener(responder, (res) => this.send(res), count);
-        this
-            .emitters
-            .forEach(emitter => emitter
-                [EmitterRole.RECEIVER]
-                .on('*', listener)
-            );
+	respond(responder: (request: Request) => any, count: number = Infinity): this {
+		let listener = this.createListener(responder, (res) => this.send(res), count);
+		this
+			.emitters
+			.forEach(emitter => emitter
+				[EmitterRole.RECEIVER]
+				.on('*', listener)
+			);
 
-        return this;
-    }
+		return this;
+	}
 
-    respondOnce(responder: (request: Request) => Response): this {
-        return this.respond(responder, 1);
-    }
+	respondOnce(responder: (request: Request) => Response): this {
+		return this.respond(responder, 1);
+	}
 
-    subscribe(subscriber: (request: Request) => void, count: number = Infinity): this {
-        let listener = this.createListener(subscriber, () => {}, count);
-        this
-            .emitters
-            .forEach(emitter => emitter
-                [EmitterRole.RECEIVER]
-                .on('*', listener)
-            );
+	subscribe(subscriber: (request: Request) => void, count: number = Infinity): this {
+		let listener = this.createListener(subscriber, () => {}, count);
+		this
+			.emitters
+			.forEach(emitter => emitter
+				[EmitterRole.RECEIVER]
+				.on('*', listener)
+			);
 
-        return this;
-    }
+		return this;
+	}
 
-    subscribeOnce(subscriber: (request: Request) => void): this {
-        return this.subscribe(subscriber, 1);
-    }
+	subscribeOnce(subscriber: (request: Request) => void): this {
+		return this.subscribe(subscriber, 1);
+	}
 
-    remove(): this {
-        this.removeAll(this.listeners, EmitterRole.RECEIVER);
-        return this;
-    }
+	remove(): this {
+		this.removeAll(this.listeners, EmitterRole.RECEIVER);
+		return this;
+	}
 
-    protected createListener(responder: (request: Request) => any, sender: (response: Response) => any, count: number = Infinity) {
+	protected createListener(responder: (request: Request) => any, sender: (response: Response) => any, count: number = Infinity) {
 
-        let sent = 0;
-        let listenerId = this.getId();
-        let listener = (req: Request) => {
+		let sent = 0;
+		let listenerId = this.getId();
+		let listener = (req: Request) => {
 
-            if (this.isDisabled) { return; }
-            
-            if (sent >= count) {
-                this.removeListener(this.listeners, EmitterRole.RECEIVER, listenerId);
-                return;
-            }
+			if (this.isDisabled) { return; }
+			
+			if (sent >= count) {
+				this.removeListener(this.listeners, EmitterRole.RECEIVER, listenerId);
+				return;
+			}
 
-            sent++;
-            let response: Response | void;
-            try {
-                response = new Response(req, responder(req));
-                sender(response);
-            } catch (error) {
-                if (response) {
-                    response.error = error;
-                }
-            }
+			sent++;
+			let response: Response | void;
+			try {
+				response = new Response(req, responder(req));
+				sender(response);
+			} catch (error) {
+				if (response) {
+					response.error = error;
+				}
+			}
 
-            return response;
-        };
+			return response;
+		};
 
-        this
-            .listeners
-            .set(listenerId, listener);
+		this
+			.listeners
+			.set(listenerId, listener);
 
-        return listener;
-    }
+		return listener;
+	}
 
-    protected send(response: Response): this {
-        this
-            .emitters
-            .forEach(emitter => emitter
-                [EmitterRole.SENDER]
-                .emit(response.request.path, response)
-            );
-        return this;
-    }
+	protected send(response: Response): this {
+		this
+			.emitters
+			.forEach(emitter => emitter
+				[EmitterRole.SENDER]
+				.emit(response.request.path, response)
+			);
+		return this;
+	}
 }
 
 export default ReceiverHandle;
