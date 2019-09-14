@@ -5,8 +5,7 @@ import Store from './Store';
 
 class Router {
 	constructor() {
-		let store: Store = new Store();
-		this.store = store;
+		this.store = new Store();
 		this.receive = new Receiver(this);
 		this.send = new Sender(this);
 	}
