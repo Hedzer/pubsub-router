@@ -4,7 +4,7 @@ import Request from './Request';
 import HttpMethod from './HttpMethod';
 import EmitterHub from './EmitterHub';
 import EventEmitter from 'eventemitter3'
-import { RECEIVER } from './Constants';
+import EmitterRole from './EmitterRole';
 
 class Store {
 	public emitters: MethodMap = new MethodMap();
@@ -35,7 +35,7 @@ class Store {
 
 		this
 			.events
-			.emit(`added ${RECEIVER} ${method}`, emitter);
+			.emit(`added ${EmitterRole.RECEIVER} ${method}`, emitter);
 
 		//this.events.on(`added ${RECEIVER} ${method}`, e => console.log(e));
 		return emitter;
@@ -51,7 +51,7 @@ class Store {
 
 		this
 			.events
-			.emit(`removed ${RECEIVER} ${method}`, emitter);
+			.emit(`removed ${EmitterRole.RECEIVER} ${method}`, emitter);
 	}
 
 	retrieve(method: HttpMethod, route: string): EmitterHub[] {

@@ -3,7 +3,6 @@ import EmitterHub from './EmitterHub';
 import Message from './Message';
 import ID from './ID';
 import EmitterRole from './EmitterRole';
-import { SENDER, RECEIVER } from './Constants';
 import Router from './Router';
 import HttpMethod from './HttpMethod';
 

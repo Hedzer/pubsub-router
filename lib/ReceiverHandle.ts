@@ -3,9 +3,9 @@ import Request from './Request';
 import Response from './Response';
 import EmitterHub from './EmitterHub';
 import Handle from './Handle';
-import { SENDER, RECEIVER } from './Constants';
 import Router from './Router';
 import HttpMethod from './HttpMethod';
+import EmitterRole from './EmitterRole';
 
 
 class ReceiverHandle extends Handle<Request, Response> {
@@ -20,7 +20,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         this
             .emitters
             .forEach(emitter => emitter
-                [RECEIVER]
+                [EmitterRole.RECEIVER]
                 .on('*', listener)
             );
 
@@ -36,7 +36,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         this
             .emitters
             .forEach(emitter => emitter
-                [RECEIVER]
+                [EmitterRole.RECEIVER]
                 .on('*', listener)
             );
 
@@ -48,7 +48,7 @@ class ReceiverHandle extends Handle<Request, Response> {
     }
 
     remove(): this {
-        this.removeAll(this.listeners, RECEIVER);
+        this.removeAll(this.listeners, EmitterRole.RECEIVER);
         return this;
     }
 
@@ -61,7 +61,7 @@ class ReceiverHandle extends Handle<Request, Response> {
             if (this.isDisabled) { return; }
             
             if (sent >= count) {
-                this.removeListener(this.listeners, RECEIVER, listenerId);
+                this.removeListener(this.listeners, EmitterRole.RECEIVER, listenerId);
                 return;
             }
 
@@ -90,7 +90,7 @@ class ReceiverHandle extends Handle<Request, Response> {
         this
             .emitters
             .forEach(emitter => emitter
-                [SENDER]
+                [EmitterRole.SENDER]
                 .emit(response.request.path, response)
             );
         return this;

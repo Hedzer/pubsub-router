@@ -17,43 +17,38 @@ class Sender {
 	private store: Store;
 	private receiver: Receiver;
 
-	get(path: string, data: any): SenderHandle {
-		let method: HttpMethod = 'GET';
-		let emitters = this.store.retrieve(method, path);
-		let handle = new SenderHandle(this.router, method, emitters, path);
-		if (arguments.length > 1) { handle.request(data); }
+	get(path: string, ...data: any[]): SenderHandle {
+		let emitters = this.store.retrieve(HttpMethod.GET, path);
+		let handle = new SenderHandle(this.router, HttpMethod.GET, emitters, path);
+		if (data.length) { handle.request(data); }
 		return handle;
 	}
 
-	post(path: string, data: any): SenderHandle {
-		let method: HttpMethod = 'POST';
-		let emitters = this.store.retrieve(method, path);
-		let handle = new SenderHandle(this.router, method, emitters, path);
-		if (arguments.length > 1) { handle.request(data); }
+	post(path: string, ...data: any[]): SenderHandle {
+		let emitters = this.store.retrieve(HttpMethod.POST, path);
+		let handle = new SenderHandle(this.router, HttpMethod.POST, emitters, path);
+		if (data.length) { handle.request(data); }
 		return handle;
 	}
 
-	put(path: string, data: any): SenderHandle {
-		let method: HttpMethod = 'PUT';
-		let emitters = this.store.retrieve(method, path);
-		let handle = new SenderHandle(this.router, method, emitters, path);
-		if (arguments.length > 1) { handle.request(data); }
+	put(path: string, ...data: any[]): SenderHandle {
+		let emitters = this.store.retrieve(HttpMethod.PUT, path);
+		let handle = new SenderHandle(this.router, HttpMethod.PUT, emitters, path);
+		if (data.length) { handle.request(data); }
 		return handle;
 	}
 
-	patch(path: string, data: any): SenderHandle {
-		let method: HttpMethod = 'PATCH';
-		let emitters = this.store.retrieve(method, path);
-		let handle = new SenderHandle(this.router, method, emitters, path);
-		if (arguments.length > 1) { handle.request(data); }
+	patch(path: string, ...data: any[]): SenderHandle {
+		let emitters = this.store.retrieve(HttpMethod.PATCH, path);
+		let handle = new SenderHandle(this.router, HttpMethod.PATCH, emitters, path);
+		if (data.length) { handle.request(data); }
 		return handle;
 	}
 
-	delete(path: string, data: any): SenderHandle {
-		let method: HttpMethod = 'DELETE';
-		let emitters = this.store.retrieve(method, path);
-		let handle = new SenderHandle(this.router, method, emitters, path);
-		if (arguments.length > 1) { handle.request(data); }
+	delete(path: string, ...data: any[]): SenderHandle {
+		let emitters = this.store.retrieve(HttpMethod.DELETE, path);
+		let handle = new SenderHandle(this.router, HttpMethod.DELETE, emitters, path);
+		if (data.length) { handle.request(data); }
 		return handle;
 	}
 }

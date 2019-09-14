@@ -12,7 +12,7 @@ class Request {
         this.data = data;
     }
     public id: string = id.next().value;
-    public method: HttpMethod = 'GET';
+    public method: HttpMethod = HttpMethod.GET;
     public route: string = '';
     public timestamp: Date = new Date();
     public path: string = '';

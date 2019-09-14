@@ -1,4 +1,7 @@
 
-type EmitterRole = 'sender' | 'receiver';
+enum EmitterRole {
+	SENDER = "sender",
+	RECEIVER = "receiver",
+}
 
 export default EmitterRole;

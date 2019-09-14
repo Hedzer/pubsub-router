@@ -3,10 +3,10 @@ import Request from './Request';
 import Response from './Response';
 import EmitterHub from './EmitterHub';
 import Handle from './Handle';
-import { SENDER, RECEIVER } from './Constants';
 import Router from './Router';
 import HttpMethod from './HttpMethod';
 import ReceiveParams from './ReceiveParams';
+import EmitterRole from './EmitterRole';
 
 class SenderHandle extends Handle<Response, Request> {
     constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], path: string) {
@@ -15,8 +15,8 @@ class SenderHandle extends Handle<Response, Request> {
         router
             .store
             .events
-            .on(`added ${RECEIVER} ${method}`, e => this.onReceiverAdded(e), this)
-            .on(`removed ${RECEIVER} ${method}`, e => this.onReceiverRemoved(e), this);
+            .on(`added ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverAdded(e), this)
+            .on(`removed ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverRemoved(e), this);
     }
 
     public listeners: Map<string, (request: Response) => Request | void> = new Map<string, (request: Response) => Request | void>();
@@ -32,7 +32,7 @@ class SenderHandle extends Handle<Response, Request> {
         this
             .emitters
             .forEach(emitter => emitter
-                [SENDER]
+                [EmitterRole.SENDER]
                 .on(this.route, listener)
             );
         
@@ -46,14 +46,14 @@ class SenderHandle extends Handle<Response, Request> {
     }
 
     remove(): this {
-        this.removeAll(this.listeners, SENDER);
+        this.removeAll(this.listeners, EmitterRole.SENDER);
         
         this
             .router
             .store
             .events
-            .removeListener(`added ${RECEIVER} ${this.method}`, e => this.onReceiverAdded(e), this)
-            .removeListener(`removed ${RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e), this);
+            .removeListener(`added ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverAdded(e), this)
+            .removeListener(`removed ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e), this);
         return this;
     }
 
@@ -66,7 +66,7 @@ class SenderHandle extends Handle<Response, Request> {
             if (this.isDisabled) { return; }
             
             if (received >= count) {
-                this.removeListener(this.listeners, SENDER, listenerId);
+                this.removeListener(this.listeners, EmitterRole.SENDER, listenerId);
                 return;
             }
 
@@ -101,7 +101,7 @@ class SenderHandle extends Handle<Response, Request> {
             })
             .forEach(pair => pair
                 .emitter
-                [RECEIVER]
+                [EmitterRole.RECEIVER]
                 .emit('*', pair.request)
             );
         return this;
@@ -118,7 +118,7 @@ class SenderHandle extends Handle<Response, Request> {
         this
             .receivers
             .forEach(receiver => emitter
-                [SENDER]
+                [EmitterRole.SENDER]
                 .on(this.route, receiver.listener)
             );
     }
