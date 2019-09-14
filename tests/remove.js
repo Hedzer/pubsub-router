@@ -4,7 +4,7 @@ import test from 'ava';
 
 import Router from '../dist/index';
 
-test('remove requester', async t => {
+test('remove receiver', async t => {
 	const router = new Router();
 	let finished = new Promise((resolve, reject) => {
 
@@ -38,4 +38,3 @@ test('remove requester', async t => {
 	let received = await finished;
 	t.is(received, 'RIGHT');
 });
-
