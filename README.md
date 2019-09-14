@@ -11,6 +11,7 @@ npm install --save pubsub-router
 ### Quick Example
 ```javascript
 import Router from 'pubsub-router';
+// const Router = require('pubsub-router').default; // for node
 
 let router = new Router();
 
