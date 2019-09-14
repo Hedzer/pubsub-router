@@ -199,6 +199,6 @@ router
 ### Quirks
 * Sending data in the `GET` channel. GET requests don't usually act like POST, but this was done for the sake of consistency.
 * If no receivers are set up when requests are made, those requests are lost. Some consideration has been made for the idea of a buffer of unsent requests, but this could cause other issues.
-* 
+
 ### Special Thanks
 A special thanks to the authors of `route-parser` and `eventemitter3` . This work is built on top of theirs and would have taken significantly longer without the use of those libraries.
