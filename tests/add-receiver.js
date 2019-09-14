@@ -10,14 +10,14 @@ test('add receiver after', async t => {
 
 		let sender = router
 			.send
-			.post('/YOLOOOO/echo')
+			.post('/example/echo')
 			.request('TEST')
 			.receive((response) => resolve(response.data));
 
 		setTimeout(() => {
 			let receiver = router
 				.receive
-				.post('/YOLOOOO/:YOLO')
+				.post('/example/:arg')
 				.respond((request) => 'RIGHT');
 			
 			sender.request("TEST2");
