@@ -17,40 +17,18 @@ class Sender {
 	private store: Store;
 	private receiver: Receiver;
 
-	get(path: string, ...data: any[]): SenderHandle {
-		let emitters = this.store.retrieve(HttpMethod.GET, path);
-		let handle = new SenderHandle(this.router, HttpMethod.GET, emitters, path);
-		if (data.length) { handle.request(data); }
-		return handle;
-	}
+    get = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.GET, path, data);
+    post = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.POST, path, data);
+    put = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PUT, path, data);
+    patch = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.PATCH, path, data);
+    delete = (path: string, ...data: any[]): SenderHandle => this.getHandle(HttpMethod.DELETE, path, data);
 
-	post(path: string, ...data: any[]): SenderHandle {
-		let emitters = this.store.retrieve(HttpMethod.POST, path);
-		let handle = new SenderHandle(this.router, HttpMethod.POST, emitters, path);
-		if (data.length) { handle.request(data); }
-		return handle;
-	}
-
-	put(path: string, ...data: any[]): SenderHandle {
-		let emitters = this.store.retrieve(HttpMethod.PUT, path);
-		let handle = new SenderHandle(this.router, HttpMethod.PUT, emitters, path);
-		if (data.length) { handle.request(data); }
-		return handle;
-	}
-
-	patch(path: string, ...data: any[]): SenderHandle {
-		let emitters = this.store.retrieve(HttpMethod.PATCH, path);
-		let handle = new SenderHandle(this.router, HttpMethod.PATCH, emitters, path);
-		if (data.length) { handle.request(data); }
-		return handle;
-	}
-
-	delete(path: string, ...data: any[]): SenderHandle {
-		let emitters = this.store.retrieve(HttpMethod.DELETE, path);
-		let handle = new SenderHandle(this.router, HttpMethod.DELETE, emitters, path);
-		if (data.length) { handle.request(data); }
-		return handle;
-	}
+	private getHandle(method: HttpMethod, path: string, data: any[]): SenderHandle {
+        let emitters = this.store.retrieve(method, path);
+        let handle = new SenderHandle(this.router, method, emitters, path);
+        if (data.length) { handle.request(data); }
+        return handle;
+    }
 }
 
 export default Sender;
