@@ -1,6 +1,6 @@
 {
   "name": "pubsub-router",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Express style routes, publish subscribe style delivery.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
