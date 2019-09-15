@@ -47,6 +47,20 @@ class ReceiverHandle extends Handle<Request, Response> {
 		return this.subscribe(subscriber, 1);
 	}
 
+	broadcast(data: any): this {
+		this
+			.emitters
+			.forEach(emitter => emitter
+				[EmitterRole.SENDER]
+				.eventNames()
+				.map(event => new Request(emitter, <string>event, null))
+				.map(req => new Response(req, data))
+				.forEach(res => this.send(res))
+			);
+
+		return this;
+	}
+
 	remove(): this {
 		this.removeAll(this.listeners, EmitterRole.RECEIVER);
 		return this;
@@ -93,6 +107,7 @@ class ReceiverHandle extends Handle<Request, Response> {
 				[EmitterRole.SENDER]
 				.emit(response.request.path, response)
 			);
+			
 		return this;
 	}
 }

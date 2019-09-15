@@ -1,3 +1,4 @@
+
 ## PubSub Router
 
 ### What is it?
@@ -179,6 +180,7 @@ router
 | respondOnce | Responds to a request only once. Has the same arguments as `respond` without the `count` argument. |
 |subscribe|Similar to respond, but does not generate a response. Subscribe accepts a method `(request:  Request) =>  void` and runs this method on every request. Subscribe also accepts a `count` and will only allow that many requests to be listened to. Default count is `Infinity`. |
 |subscribeOnce|Does the same thing as subscribe but will only listen to one request. It is missing the `count` argument.|
+|broadcast|Emits a value to all senders that match the attached route. Broadcast occurs once for each call.|
 |remove|Cleans up, and removes all responders and listeners.|
 |disable|Disables responding and subscribing methods from executing. Execution counts used by the `count` arguments of `respond\Once` and `subscribe\Once` will also freeze.|
 |enable|Re-enables a disabled receiver.|

@@ -54,6 +54,7 @@ class SenderHandle extends Handle<Response, Request> {
 			.events
 			.removeListener(`added ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverAdded(e), this)
 			.removeListener(`removed ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e), this);
+
 		return this;
 	}
 
@@ -104,6 +105,7 @@ class SenderHandle extends Handle<Response, Request> {
 				[EmitterRole.RECEIVER]
 				.emit('*', pair.request)
 			);
+			
 		return this;
 	}
 

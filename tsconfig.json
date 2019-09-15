@@ -65,6 +65,6 @@
       "dist"
   ],
   "include": [
-    "lib"
+    "src"
   ]
 }
