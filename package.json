@@ -1,6 +1,6 @@
 {
   "name": "pubsub-router",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Express style routes, publish subscribe style delivery.",
   "keywords": [
     "pubsub",
@@ -22,14 +22,14 @@
   "prepublish": "tsc",
   "dependencies": {
     "eventemitter3": "^4.0.0",
-    "route-parser": "0.0.5",
-    "tsc": "^1.20150623.0"
+    "route-parser": "0.0.5"
   },
   "devDependencies": {
     "ava": "^2.3.0",
     "@types/eventemitter3": "^2.0.2",
     "@types/route-parser": "^0.1.3",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "tsc": "^1.20150623.0"
   },
   "scripts": {
     "build": "tsc",
