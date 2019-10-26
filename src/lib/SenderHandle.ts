@@ -4,7 +4,7 @@ import Response from './Response';
 import EmitterHub from './EmitterHub';
 import Handle from './Handle';
 import Router from './Router';
-import HttpMethod from './HttpMethod';
+import HttpMethod from './RouterMethod';
 import ReceiveParams from './ReceiveParams';
 import EmitterRole from './EmitterRole';
 

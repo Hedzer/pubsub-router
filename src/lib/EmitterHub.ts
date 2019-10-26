@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import HttpMethod from './HttpMethod';
+import HttpMethod from './RouterMethod';
 import Matcher from 'route-parser';
 import ID from "./ID";
 

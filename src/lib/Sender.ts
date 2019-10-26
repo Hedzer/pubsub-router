@@ -3,7 +3,7 @@ import Receiver from './Receiver';
 import Store from './Store';
 import Router from './Router';
 import SenderHandle from './SenderHandle';
-import HttpMethod from './HttpMethod';
+import HttpMethod from './RouterMethod';
 
 class Sender {
 

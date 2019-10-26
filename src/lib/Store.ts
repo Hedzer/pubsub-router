@@ -1,7 +1,7 @@
 
 import MethodMap from './MethodMap';
 import Request from './Request';
-import HttpMethod from './HttpMethod';
+import HttpMethod from './RouterMethod';
 import EmitterHub from './EmitterHub';
 import EventEmitter from 'eventemitter3'
 import EmitterRole from './EmitterRole';

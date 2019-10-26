@@ -1,5 +1,5 @@
 
-enum HttpMethod {
+enum RouterMethod {
 	GET = 'GET',
 	POST = 'POST',
 	PUT = 'PUT',
@@ -7,5 +7,5 @@ enum HttpMethod {
 	DELETE = 'DELETE',
 };
 
-export default HttpMethod;
+export default RouterMethod;
 

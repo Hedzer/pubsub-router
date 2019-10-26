@@ -1,4 +1,4 @@
-import HttpMethod from "./HttpMethod";
+import HttpMethod from "./RouterMethod";
 import EmitterHub from "./EmitterHub";
 import ID from "./ID";
 

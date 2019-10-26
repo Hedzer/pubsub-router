@@ -1,4 +1,4 @@
-import HttpMethod from "./HttpMethod";
+import HttpMethod from "./RouterMethod";
 import Request from "./Request";
 import ID from "./ID";
 

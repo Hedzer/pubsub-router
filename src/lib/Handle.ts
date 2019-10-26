@@ -4,7 +4,7 @@ import Message from './Message';
 import ID from './ID';
 import EmitterRole from './EmitterRole';
 import Router from './Router';
-import HttpMethod from './HttpMethod';
+import HttpMethod from './RouterMethod';
 
 let id = ID.generate();
 
