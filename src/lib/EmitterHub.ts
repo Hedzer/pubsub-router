@@ -1,7 +1,7 @@
-import EventEmitter from 'eventemitter3';
 import HttpMethod from './RouterMethod';
 import Matcher from 'route-parser';
 import ID from "./ID";
+import { EventEmitter } from 'events';
 
 let id = ID.generate();
 

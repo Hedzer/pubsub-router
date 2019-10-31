@@ -3,8 +3,8 @@ import MethodMap from './MethodMap';
 import Request from './Request';
 import HttpMethod from './RouterMethod';
 import EmitterHub from './EmitterHub';
-import EventEmitter from 'eventemitter3'
 import EmitterRole from './EmitterRole';
+import { EventEmitter } from 'events';
 
 class Store {
 	public emitters: MethodMap = new MethodMap();
