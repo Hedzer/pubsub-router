@@ -15,8 +15,8 @@ class SenderHandle extends Handle<Response, Request> {
 		router
 			.store
 			.events
-			.on(`added ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverAdded(e))
-			.on(`removed ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverRemoved(e));
+			.on(`added ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverAdded(e), this)
+			.on(`removed ${EmitterRole.RECEIVER} ${method}`, e => this.onReceiverRemoved(e), this);
 	}
 
 	public listeners: Map<string, (request: Response) => Request | void> = new Map<string, (request: Response) => Request | void>();
@@ -52,8 +52,8 @@ class SenderHandle extends Handle<Response, Request> {
 			.router
 			.store
 			.events
-			.removeListener(`added ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverAdded(e))
-			.removeListener(`removed ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e));
+			.removeListener(`added ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverAdded(e), this)
+			.removeListener(`removed ${EmitterRole.RECEIVER} ${this.method}`, e => this.onReceiverRemoved(e), this);
 
 		return this;
 	}
