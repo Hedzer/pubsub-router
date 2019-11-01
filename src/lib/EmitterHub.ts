@@ -1,9 +1,9 @@
-import EventEmitter from 'eventemitter3';
+import EventEmitter from './MicroEmitter';
 import HttpMethod from './RouterMethod';
 import Matcher from 'route-parser';
-import ID from "./ID";
+import IdGenerator from "./IdGenerator";
 
-let id = ID.generate();
+let idGenerator = IdGenerator.generate();
 
 class EmitterHub {
 	constructor(method: HttpMethod, route: string) {
@@ -12,7 +12,7 @@ class EmitterHub {
 		this.matcher = new Matcher(route);
 	}
 	
-	public id: string = id.next().value;
+	public id: string = idGenerator.next().value;
 	public method: HttpMethod;
 	public route: string;
 	public matcher: Matcher;

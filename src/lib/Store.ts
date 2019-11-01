@@ -3,7 +3,7 @@ import MethodMap from './MethodMap';
 import Request from './Request';
 import HttpMethod from './RouterMethod';
 import EmitterHub from './EmitterHub';
-import EventEmitter from 'eventemitter3'
+import EventEmitter from './MicroEmitter'
 import EmitterRole from './EmitterRole';
 
 class Store {

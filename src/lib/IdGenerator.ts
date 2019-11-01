@@ -1,6 +1,6 @@
 
 
-class ID {
+class IdGenerator {
 	static * generate(): IterableIterator<string> {
 		let serial: number = 0;
 		let random: string = '';
@@ -15,4 +15,4 @@ class ID {
 	}
 }
 
-export default ID;
+export default IdGenerator;
