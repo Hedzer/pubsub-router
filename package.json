@@ -1,6 +1,6 @@
 {
   "name": "pubsub-router",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Express style routes, publish subscribe style delivery.",
   "keywords": [
     "pubsub",
@@ -21,8 +21,9 @@
   ],
   "prepublish": "tsc",
   "dependencies": {
+    "@types/route-parser": "^0.1.3",
     "route-parser": "0.0.5",
-    "@types/route-parser": "^0.1.3"
+    "yield-uid": "^0.1.0"
   },
   "devDependencies": {
     "ava": "^2.3.0",

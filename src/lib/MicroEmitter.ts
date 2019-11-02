@@ -1,7 +1,7 @@
-import IdGenerator from "./IdGenerator";
+import uid from 'yield-uid';
 
-const functionId = Symbol('symbolId');
-const idGenerator = IdGenerator.generate();
+const functionId = Symbol.for('functionId');
+const generator = uid.generator();
 
 class MicroEmitter {
 	private events: Map<string, Map<Symbol, Function>> = new Map<string, Map<Symbol, Function>>();
@@ -10,7 +10,7 @@ class MicroEmitter {
 		if (!this.events.has(eventName)) { this.events.set(eventName, new Map<Symbol, Function>()); }
 		const events = this.getEvents(eventName);
 		let fn = <any>listener;
-		let id = fn[functionId] || idGenerator.next().value;
+		let id = fn[functionId] || generator.next().value;
 		fn[functionId] = id;
 		events.set(id, listener);
 		return this;

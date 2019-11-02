@@ -1,8 +1,8 @@
 import HttpMethod from "./RouterMethod";
 import Request from "./Request";
-import IdGenerator from "./IdGenerator";
+import uid from 'yield-uid';
 
-let idGenerator = IdGenerator.generate();
+const generator = uid.generator();
 
 class Response {
 	constructor(request: Request, data: any) {
@@ -15,7 +15,7 @@ class Response {
 		this.data = data;
 	}
 
-	public id: string = idGenerator.next().value;
+	public id: string = generator.next().value;
 	public request: Request;
 	public method: HttpMethod;
 	public route: string;

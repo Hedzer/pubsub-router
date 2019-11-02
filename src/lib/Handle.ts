@@ -1,12 +1,12 @@
 
 import EmitterHub from './EmitterHub';
 import Message from './Message';
-import IdGenerator from './IdGenerator';
+import uid from 'yield-uid';
 import EmitterRole from './EmitterRole';
 import Router from './Router';
 import HttpMethod from './RouterMethod';
 
-let idGenerator = IdGenerator.generate();
+const generator = uid.generator();
 
 abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
 	constructor(router: Router, method: HttpMethod, emitters: EmitterHub[], route: string) {
@@ -62,7 +62,7 @@ abstract class Handle<INBOUND extends Message, OUTBOUND extends Message> {
 	}
 
 	protected getId(): string {
-		return idGenerator.next().value;
+		return generator.next().value;
 	}
 
 	protected defer(method: (...params: any) => any): this {
